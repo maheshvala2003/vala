@@ -336,6 +336,7 @@ function elisc_tm_contact_form() {
     const form = document.querySelector(".contact_form");
     const returnMessage = form.querySelector(".returnmessage");
     const successMessage = returnMessage.dataset.success;
+    const submitButton = document.getElementById("send_message");
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -347,6 +348,8 @@ function elisc_tm_contact_form() {
         if (name === '' || email === '' || message === '') {
             jQuery('div.empty_notice').slideDown(500).delay(2000).slideUp(500);
         } else {
+            submitButton.textContent = 'Submitting...'; // Change button text on submit
+
             fetch(scriptURL, { method: 'POST', body: new FormData(form) })
                 .then(response => {
                     if (response.ok) {
@@ -355,15 +358,15 @@ function elisc_tm_contact_form() {
                     throw new Error('Network response was not ok.');
                 })
                 .then(data => {
-                    if (!returnMessage.querySelector("span.contact_error")) {
-                        returnMessage.innerHTML += "<span class='contact_success'>" + successMessage + "</span>";
-                        returnMessage.slideDown(500).delay(4000).slideUp(500);
-                        form.reset();
-                    } else {
-                        returnMessage.slideDown(500).delay(2000).slideUp(500);
-                    }
+                    returnMessage.innerHTML += "<span class='contact_success'>" + successMessage + "</span>";
+                    returnMessage.slideDown(500).delay(4000).slideUp(500);
+                    form.reset();
+                    submitButton.textContent = 'Submitted'; // Change button text after successful submission
                 })
-                .catch(error => console.error('Error!', error.message));
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    submitButton.textContent = 'Submit';
+                });
         }
         return false;
     });
