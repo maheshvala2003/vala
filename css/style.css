@@ -139,7 +139,7 @@ h6 {
   width: 50%;
   height: 100%;
   z-index: -1;
-  background-color: #000;
+  background-color: #8e8ff4;
   -webkit-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
@@ -181,7 +181,7 @@ h6 {
   top: 0;
   width: 1px;
   height: 100%;
-  background-color: #999;
+  background-color: #8e8ff4;
   -webkit-transform: translateY(-100%);
   -ms-transform: translateY(-100%);
   -o-transform: translateY(-100%);
