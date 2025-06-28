@@ -332,13 +332,12 @@ function elisc_tm_data_images() {
 function elisc_tm_contact_form() {
     "use strict";
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwBLg4QGezEdwOdqiTJIW6loxT75IX6rTI1LmnfR0OIsySvALfybb8eEUGUlOxeBIA1kg/exec';
-    const form = document.querySelector(".contact_form");
+    const form = document.getElementById("contact_form");
     const returnMessage = form.querySelector(".returnmessage");
     const successMessage = returnMessage.dataset.success;
     const submitButton = document.getElementById("send_message");
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener("submit", function (e) {
         e.preventDefault();
 
         const name = form.querySelector("#name").value;
@@ -348,29 +347,24 @@ function elisc_tm_contact_form() {
         if (name === '' || email === '' || message === '') {
             jQuery('div.empty_notice').slideDown(500).delay(2000).slideUp(500);
         } else {
-            submitButton.textContent = 'Submitting...'; // Change button text on submit
+            submitButton.textContent = 'Sending...';
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    }
-                    throw new Error('Network response was not ok.');
-                })
-                .then(data => {
-                    returnMessage.innerHTML += "<span class='contact_success'>" + successMessage + "</span>";
-                    returnMessage.slideDown(500).delay(4000).slideUp(500);
+            emailjs.sendForm('service_4wy7snz', 'template_klc5ftc', form)
+                .then(() => {
+                    returnMessage.innerHTML = "<span class='contact_success'>" + successMessage + "</span>";
+                    jQuery(returnMessage).slideDown(500).delay(4000).slideUp(500);
                     form.reset();
-                    submitButton.textContent = 'Submitted'; // Change button text after successful submission
+                    submitButton.textContent = 'Sent';
                 })
-                .catch(error => {
-                    console.error('Error!', error.message);
+                .catch((error) => {
+                    console.error('EmailJS error:', error);
                     submitButton.textContent = 'Submit';
                 });
         }
-        return false;
     });
 }
+
+document.addEventListener("DOMContentLoaded", elisc_tm_contact_form);
 
 function elisc_tm_owl_carousel() {
     "use strict";
